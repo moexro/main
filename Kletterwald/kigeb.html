@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kindergeburtstag – Kassen-Übersicht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-dark:#17271c;
+    --green-darker:#101c14;
+    --terracotta:#a8552f;
+    --terracotta-dark:#8a4526;
+    --olive:#8fa23c;
+    --olive-dark:#71812c;
+    --cream:#ddd0af;
+    --cream-light:#f3ecd8;
+    --orange:#cc6a3a;
+    --white:#ffffff;
+    --ink:#251d12;
+    --font-display:'Baloo 2', sans-serif;
+    --font-body:'Poppins', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html, body{ height:100%; }
+
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--terracotta);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:14px 16px;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .top-decor{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:26px;
+    background:var(--green-dark);
+    clip-path:polygon(0 0,100% 0,100% 30%,88% 100%,74% 25%,60% 100%,46% 20%,32% 100%,18% 25%,4% 100%,0 30%);
+    z-index:0;
+  }
+
+  .page{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:1040px;
+  }
+
+  .page-head{
+    text-align:center;
+    margin-bottom:18px;
+  }
+
+  .eyebrow{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.7rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--cream);
+    margin:0 0 4px;
+  }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:clamp(1.35rem,2.6vw,1.9rem);
+    line-height:1.05;
+    letter-spacing:0.01em;
+    margin:0;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    align-items:stretch;
+  }
+
+  /* ---------- Left: package picker card ---------- */
+  .calc-card{
+    background:var(--cream);
+    border-radius:22px;
+    padding:clamp(18px,2.6vw,26px);
+    color:var(--ink);
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    overflow-y:auto;
+  }
+
+  .group-label{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.7rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--terracotta-dark);
+    margin:14px 0 8px;
+  }
+  .group-label:first-child{ margin-top:0; }
+
+  .pkg-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:var(--white);
+    border:2px solid var(--cream);
+    border-radius:14px;
+    padding:10px 14px;
+    margin-bottom:8px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:border-color .15s ease, transform .08s ease;
+  }
+  .pkg-row:active{ transform:scale(.98); }
+  .pkg-row:focus-within, .pkg-row.active{ border-color:var(--olive); }
+  .pkg-row.active{ background:var(--cream-light); }
+
+  .pkg-name{
+    display:block;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1rem;
+    color:var(--ink);
+  }
+  .pkg-sub{
+    display:block;
+    font-size:0.72rem;
+    font-weight:500;
+    color:var(--terracotta-dark);
+    margin-top:1px;
+  }
+  .pkg-price{
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:1.15rem;
+    color:var(--terracotta);
+    white-space:nowrap;
+  }
+  .pkg-row.active .pkg-price{ color:var(--olive-dark); }
+
+  /* ---------- Right: ticket stub result ---------- */
+  .ticket{
+    background:var(--cream);
+    border-radius:20px;
+    padding:clamp(18px,2.6vw,26px) clamp(16px,2.6vw,24px) 20px;
+    position:relative;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    overflow:hidden;
+  }
+  .ticket::before,
+  .ticket::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:28px; height:28px;
+    background:var(--terracotta);
+    border-radius:50%;
+  }
+  .ticket::before{ left:-14px; }
+  .ticket::after{ right:-14px; }
+
+  .ticket-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:14px;
+  }
+  .ticket-head h2{
+    font-family:var(--font-display);
+    text-transform:uppercase;
+    font-size:1rem;
+    margin:0;
+    color:var(--terracotta-dark);
+    letter-spacing:0.02em;
+  }
+  .ticket-head .ticket-type{
+    font-family:var(--font-body);
+    font-size:0.68rem;
+    font-weight:600;
+    color:var(--olive);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+
+  .price-hero{
+    background:var(--olive);
+    border-radius:16px;
+    padding:12px 16px;
+    text-align:center;
+    margin-bottom:14px;
+  }
+  .price-hero .label{
+    font-size:0.68rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--green-darker);
+    margin-bottom:2px;
+  }
+  .price-hero .value{
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:clamp(1.5rem,3vw,2rem);
+    color:var(--white);
+  }
+  .price-hero .sub{
+    font-size:0.68rem;
+    font-weight:600;
+    color:rgba(255,255,255,.85);
+    margin-top:2px;
+  }
+
+  .checklist{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    flex:1;
+    overflow-y:auto;
+    padding-bottom:4px;
+  }
+  .check-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--cream-light);
+    border-radius:10px;
+    padding:8px 12px;
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .check-item.off{ opacity:.45; }
+  .check-item .icon{
+    flex-shrink:0;
+    width:20px; height:20px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.68rem;
+    font-weight:700;
+  }
+  .check-item.on .icon{ background:var(--olive); color:var(--white); }
+  .check-item.off .icon{ background:#cbbd97; color:var(--cream-light); }
+
+  .perforation{
+    border-top:2px dashed #b8a67d;
+    margin:14px -2px 0;
+  }
+
+  .ticket-formula{
+    padding-top:12px;
+    font-family:var(--font-mono);
+    font-size:0.66rem;
+    color:var(--terracotta-dark);
+    line-height:1.5;
+    text-align:center;
+  }
+
+  @media (max-width:760px){
+    .layout{ grid-template-columns:1fr; }
+    body{ align-items:flex-start; padding-top:36px; }
+    .ticket::before,.ticket::after{ display:none; }
+  }
+
+  :focus-visible{ outline:3px solid var(--orange); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="top-decor"></div>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Kasse · Kindergeburtstag</p>
+    <h1>Was gehört zu welchem Paket?</h1>
+  </div>
+
+  <div class="layout">
+
+    <div class="calc-card">
+      <div class="group-label">Miniparcours</div>
+      <button class="pkg-row" data-pkg="mini-entdecker">
+        <span><span class="pkg-name">Entdecker</span><span class="pkg-sub">bis 6 Minis · +14 € je weiterem Kind</span></span>
+        <span class="pkg-price">90 €</span>
+      </button>
+      <button class="pkg-row" data-pkg="mini-abenteurer">
+        <span><span class="pkg-name">Abenteurer</span><span class="pkg-sub">bis 6 Minis · +17 € je weiterem Kind</span></span>
+        <span class="pkg-price">115 €</span>
+      </button>
+
+      <div class="group-label">Höhenparcours</div>
+      <button class="pkg-row" data-pkg="hoehe-entdecker">
+        <span><span class="pkg-name">Entdecker</span><span class="pkg-sub">bis 6 Kinder · +20 € je weiterem Kind</span></span>
+        <span class="pkg-price">125 €</span>
+      </button>
+      <button class="pkg-row" data-pkg="hoehe-abenteurer">
+        <span><span class="pkg-name">Abenteurer</span><span class="pkg-sub">bis 6 Kinder · +23 € je weiterem Kind</span></span>
+        <span class="pkg-price">140 €</span>
+      </button>
+      <button class="pkg-row" data-pkg="hoehe-wipfelstuermer">
+        <span><span class="pkg-name">Wipfelstürmer</span><span class="pkg-sub">bis 6 Kinder · +25 € je weiterem Kind</span></span>
+        <span class="pkg-price">250 €</span>
+      </button>
+    </div>
+
+    <div class="ticket" aria-live="polite">
+      <div class="ticket-head">
+        <h2>Checkliste</h2>
+        <span class="ticket-type" id="ticketType">Miniparcours</span>
+      </div>
+      <div class="price-hero">
+        <div class="label">Preis</div>
+        <div class="value" id="rPrice">90 €</div>
+        <div class="sub" id="rSub">bis 6 Kinder · + 14 € je weiterem Kind</div>
+      </div>
+      <div class="checklist" id="rChecklist"></div>
+      <div class="perforation"></div>
+      <p class="ticket-formula">* 15 % Rabatt nur am Tag der Feier einlösbar – Öffnungszeiten Waldhaus Einsiedel beachten.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const packages = {
+    'mini-entdecker': {
+      name:'Entdecker', tag:'Miniparcours', price:'90 €', sub:'bis 6 Minis · + 14 € je weiterem Kind',
+      items:[
+        ['Gutschein für das Geburtstagskind', true],
+        ['Urkunden', true],
+        ['15 % Rabatt Biergarten am Waldhaus', true],
+        ['Bio-Kaltgetränk pro Kind', false],
+        ['Reservierter Tisch', false],
+        ['Handschuhe', false],
+        ['Exklusive Trainer/in-Betreuung', false],
+      ]
+    },
+    'mini-abenteurer': {
+      name:'Abenteurer', tag:'Miniparcours', price:'115 €', sub:'bis 6 Minis · + 17 € je weiterem Kind',
+      items:[
+        ['Gutschein für das Geburtstagskind', true],
+        ['Urkunden', true],
+        ['15 % Rabatt Biergarten am Waldhaus', true],
+        ['Bio-Kaltgetränk pro Kind', true],
+        ['Reservierter Tisch', true],
+        ['Handschuhe', false],
+        ['Exklusive Trainer/in-Betreuung', false],
+      ]
+    },
+    'hoehe-entdecker': {
+      name:'Entdecker', tag:'Höhenparcours', price:'125 €', sub:'bis 6 Kinder · + 20 € je weiterem Kind',
+      items:[
+        ['Gutschein für das Geburtstagskind', true],
+        ['Urkunden', true],
+        ['15 % Rabatt Biergarten am Waldhaus', true],
+        ['Bio-Kaltgetränk pro Kind', false],
+        ['Reservierter Tisch', false],
+        ['Handschuhe', false],
+        ['Exklusive Trainer/in-Betreuung', false],
+      ]
+    },
+    'hoehe-abenteurer': {
+      name:'Abenteurer', tag:'Höhenparcours', price:'140 €', sub:'bis 6 Kinder · + 23 € je weiterem Kind',
+      items:[
+        ['Gutschein für das Geburtstagskind', true],
+        ['Urkunden', true],
+        ['15 % Rabatt Biergarten am Waldhaus', true],
+        ['Bio-Kaltgetränk pro Kind', true],
+        ['Reservierter Tisch', true],
+        ['Handschuhe', false],
+        ['Exklusive Trainer/in-Betreuung', false],
+      ]
+    },
+    'hoehe-wipfelstuermer': {
+      name:'Wipfelstürmer', tag:'Höhenparcours', price:'250 €', sub:'bis 6 Kinder · + 25 € je weiterem Kind',
+      items:[
+        ['Gutschein für das Geburtstagskind', true],
+        ['Urkunden', true],
+        ['15 % Rabatt Biergarten am Waldhaus', true],
+        ['Bio-Kaltgetränk pro Kind', true],
+        ['Reservierter Tisch', true],
+        ['Handschuhe', true],
+        ['Exklusive Trainer/in-Betreuung (bis 6 Kinder)', true],
+      ]
+    },
+  };
+
+  const rows = document.querySelectorAll('.pkg-row');
+  const ticketType = document.getElementById('ticketType');
+  const rPrice = document.getElementById('rPrice');
+  const rSub = document.getElementById('rSub');
+  const rChecklist = document.getElementById('rChecklist');
+
+  function render(pkgId){
+    const p = packages[pkgId];
+    ticketType.textContent = p.tag;
+    rPrice.textContent = p.price;
+    rSub.textContent = p.sub;
+    rChecklist.innerHTML = p.items.map(([label, on]) => `
+      <div class="check-item ${on ? 'on' : 'off'}">
+        <span class="icon">${on ? '✓' : '–'}</span>
+        <span>${label}</span>
+      </div>
+    `).join('');
+  }
+
+  rows.forEach(row => {
+    row.addEventListener('click', () => {
+      rows.forEach(r => r.classList.remove('active'));
+      row.classList.add('active');
+      render(row.dataset.pkg);
+    });
+  });
+
+  rows[0].classList.add('active');
+  render(rows[0].dataset.pkg);
+</script>
+
+</body>
+</html>
