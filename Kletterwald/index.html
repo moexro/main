@@ -1652,8 +1652,8 @@
             if (dayIdx === -1 || hourStartIdx === -1)
               throw new Error("Datum außerhalb des verfügbaren Bereichs");
 
-            const startHour = 8,
-              endHour = 20;
+            const startHour = 10,
+              endHour = 19;
             let openFrom = -1,
               openTo = -1;
             if (openHours.open) {
@@ -1667,8 +1667,8 @@
                 const t = data.hourly.temperature_2m[hourStartIdx + h];
                 if (t !== undefined && t !== null) openTemps.push(t);
               }
-              tempMax.textContent = Math.round(Math.max(...openTemps)) + "°";
-              tempMin.textContent = Math.round(Math.min(...openTemps)) + "°";
+              tempMax.textContent = Math.round(Math.max(...openTemps)) + "°C";
+              tempMin.textContent = Math.round(Math.min(...openTemps)) + "°C";
             } else {
               tempMax.textContent =
                 Math.round(data.daily.temperature_2m_max[dayIdx]) + "°";
