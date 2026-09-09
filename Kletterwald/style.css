@@ -540,7 +540,7 @@
         font-weight: 600;
         color: var(--ink);
       }
-      .check-item.off {
+      .check-item.off:not(.self-check) {
         opacity: 0.45;
       }
       .check-item .icon {
