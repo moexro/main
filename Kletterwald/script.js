@@ -373,31 +373,6 @@ document.getElementById("paket3ModalReset").addEventListener("click", () => {
       `,
       )
       .join("");
-
-    // Nur beim Höhenparcours-Paket 3 (Wipfelstürmer): Trigger für die
-    // Ablauf-Checkliste ans Ende hängen. Da #kgChecklist mit flex:1 +
-    // overflow-y:auto arbeitet, ändert das NICHT die Höhe von Ticket
-    // oder Paket-Liste daneben – es scrollt nur innerhalb des Tickets.
-    if (pkgId === "hoehe-wipfelstuermer") {
-      kgChecklist.insertAdjacentHTML(
-        "beforeend",
-        `
-        <button type="button" class="checklist-trigger-btn" id="paket3OpenBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-            <rect x="5" y="4" width="14" height="17" rx="2"></rect>
-            <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"></path>
-            <line x1="9" y1="10" x2="15" y2="10"></line>
-            <line x1="9" y1="14" x2="15" y2="14"></line>
-            <line x1="9" y1="18" x2="12.5" y2="18"></line>
-          </svg>
-          <span>Ablauf-Checkliste öffnen</span>
-        </button>
-      `,
-      );
-      document
-        .getElementById("paket3OpenBtn")
-        .addEventListener("click", openPaket3Modal);
-    }
   }
 
   rows.forEach((row) => {
@@ -406,7 +381,16 @@ document.getElementById("paket3ModalReset").addEventListener("click", () => {
       row.classList.add("active");
       render(row.dataset.pkg);
     });
+    if (row.dataset.pkg === "hoehe-wipfelstuermer") {
+      row.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        row.click();
+      });
+    }
   });
+
+  panel.querySelector(".trainer-check").addEventListener("click", openPaket3Modal);
 
   rows[0].classList.add("active");
   render(rows[0].dataset.pkg);

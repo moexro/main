@@ -380,6 +380,21 @@ h1 {
   font-size: 1rem;
   color: var(--ink);
 }
+.trainer-check {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--olive-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
 .pkg-sub {
   display: block;
   font-size: 0.72rem;
@@ -661,35 +676,6 @@ h1 {
 }
 .check-item.toggleable:active {
   transform: scale(0.99);
-}
-
-/* ---------- Paket-3-Checkliste: Trigger-Button im Ticket ---------- */
-.checklist-trigger-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  background: var(--olive);
-  color: var(--white);
-  border: none;
-  border-radius: 10px;
-  padding: 9px 12px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.78rem;
-  cursor: pointer;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-.checklist-trigger-btn svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  stroke: var(--white);
-}
-.checklist-trigger-btn:active {
-  transform: scale(0.98);
 }
 
 /* ---------- Paket-3-Checkliste: Overlay ---------- */
