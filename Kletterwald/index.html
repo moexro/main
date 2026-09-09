@@ -110,6 +110,7 @@
 
       iframe {
         border: none;
+        display: block;
         width: 100%;
         height: 600px;
         border-radius: 22px;
@@ -148,7 +149,7 @@
           4% 100%,
           0 30%
         );
-        z-index: 0;
+        z-index: 50;
       }
 
       .page {
@@ -1146,6 +1147,7 @@
           <div class="wetter-radar-window">
             <iframe
               class="wetter_radar"
+              loading="lazy"
               src="https://www.wetteronline.de/wetterradar/gramschatzer-wald?wry=49.91,9.95&wrn=Gramschatzer%20Wald&wrg=x0443&wrx=49.91,9.95&wrm=10"
               frameborder="0"
               id="wetterRadar"
@@ -1156,6 +1158,7 @@
         <div class="card">
           <h2>Blitzradar</h2>
           <iframe
+            loading="lazy"
             src="https://maps.blitzortung.org/de/#8.5/49.91/9.95"
             frameborder="0"
             id="blitzRadar"
@@ -1247,6 +1250,18 @@
     </div>
 
     <script>
+      /* Drittanbieter-iframes dürfen die äußere Seitenposition nicht verändern. */
+      const initialPageScrollY = window.scrollY;
+      document.querySelectorAll("iframe").forEach((frame) => {
+        frame.addEventListener("load", () => {
+          requestAnimationFrame(() => {
+            if (window.scrollY !== initialPageScrollY) {
+              window.scrollTo(0, initialPageScrollY);
+            }
+          });
+        });
+      });
+
       /* ---------- Tab switching ---------- */
       const tabs = document.querySelectorAll(".tab");
       const panels = document.querySelectorAll(".tab-panel");
