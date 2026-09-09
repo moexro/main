@@ -108,6 +108,25 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      iframe {
+        border: none;
+        width: 100%;
+        height: 600px;
+        border-radius: 22px;
+        overflow: hidden;
+      }
+
+      .wetter-radar-window {
+        overflow: hidden;
+        border-radius: 22px;
+        height: 720px;
+      }
+
+      .wetter-radar-window .wetter_radar {
+        margin-top: -260px;
+        min-height: 1000px;
+      }
+
       /* thin fixed brand strip, doesn't take up layout space */
       .top-decor {
         position: fixed;
@@ -649,7 +668,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
-        margin: 20px 0 18px;
+        margin: 0 0 18px;
         align-items: stretch;
       }
       .card {
@@ -657,6 +676,7 @@
         border-radius: 20px;
         padding: 20px 22px;
         color: var(--ink);
+        margin-bottom: 20px;
       }
       .card h2 {
         font-family: var(--font-display);
@@ -1119,6 +1139,28 @@
               <button class="refresh-btn" id="refreshBtn">Aktualisieren</button>
             </div>
           </div>
+        </div>
+
+        <div class="card">
+          <h2>Wetterradar</h2>
+          <div class="wetter-radar-window">
+            <iframe
+              class="wetter_radar"
+              src="https://www.wetteronline.de/wetterradar/gramschatzer-wald?wry=49.91,9.95&wrn=Gramschatzer%20Wald&wrg=x0443&wrx=49.91,9.95&wrm=10"
+              frameborder="0"
+              id="wetterRadar"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Blitzradar</h2>
+          <iframe
+            src="https://maps.blitzortung.org/de/#8.5/49.91/9.95"
+            frameborder="0"
+            id="blitzRadar"
+            class="blitz_radar"
+          ></iframe>
         </div>
       </section>
 
