@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Kletterwald-Einsiedel | INTRANET </title>
+    <title>Kletterwald-Einsiedel | INTRANET</title>
     <style>
       /* Fonts lokal eingebettet (Baloo 2, Poppins, JetBrains Mono) – kein Netzwerk nötig, funktioniert komplett offline */
       @font-face {
@@ -1077,7 +1077,7 @@
       <!-- ================= Wetter-Overlay ================= -->
       <section id="panel-wetter" class="tab-panel" role="tabpanel" hidden>
         <div class="page-head">
-          <p class="eyebrow">Kletterwald Einsiedel · Intern</p>
+          <p class="eyebrow">-- -- --</p>
           <h1>Wetter-Overlay</h1>
           <div class="date-nav">
             <button id="prevDay" class="nav-btn">← Ein Tag zurück</button>
@@ -1115,7 +1115,8 @@
             <div class="legend" id="rainLegend"></div>
             <div>
               <span id="rainUpdated">–</span>
-              · <button class="refresh-btn" id="refreshBtn">Aktualisieren</button>
+              ·
+              <button class="refresh-btn" id="refreshBtn">Aktualisieren</button>
             </div>
           </div>
         </div>
@@ -1461,8 +1462,15 @@
         ];
 
         const FEIERTAGE_2026 = [
-          "2026-04-03", "2026-04-06", "2026-05-01", "2026-05-14",
-          "2026-05-25", "2026-06-04", "2026-08-15", "2026-10-03", "2026-11-01",
+          "2026-04-03",
+          "2026-04-06",
+          "2026-05-01",
+          "2026-05-14",
+          "2026-05-25",
+          "2026-06-04",
+          "2026-08-15",
+          "2026-10-03",
+          "2026-11-01",
         ];
 
         const BRUECKENTAGE_2026 = ["2026-05-15"]; // bei Bedarf ergänzen
@@ -1493,7 +1501,9 @@
           const total = h * 60 + m - minutes;
           const hh = Math.floor((((total % 1440) + 1440) % 1440) / 60);
           const mm = ((total % 60) + 60) % 60;
-          return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+          return (
+            String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0")
+          );
         }
 
         function computeHours(date) {
@@ -1556,7 +1566,8 @@
         const TODAY = new Date();
         TODAY.setHours(0, 0, 0, 0);
         let dayOffset = 0;
-        const MIN_OFFSET = -14, MAX_OFFSET = 14;
+        const MIN_OFFSET = -14,
+          MAX_OFFSET = 14;
 
         function getSelectedDate() {
           const d = new Date(TODAY);
@@ -1566,7 +1577,8 @@
 
         /* WETTER — Open-Meteo (schlüssellos, CORS-fähig, DWD-Basis).
            Wetter Online bietet keine öffentliche fetch()-fähige Schnittstelle. */
-        const LAT = 49.9005, LON = 9.9575; // Kletterwald Einsiedel, Gramschatzer Wald
+        const LAT = 49.9005,
+          LON = 9.9575; // Kletterwald Einsiedel, Gramschatzer Wald
 
         function rainColor(pct) {
           if (pct >= 80) return "var(--terracotta-dark)";
@@ -1610,10 +1622,18 @@
 
           tempHeading.textContent =
             "Temperatur" +
-            (diffDays === 0 ? " heute" : isPast ? " (gemessen)" : " (Vorhersage)");
+            (diffDays === 0
+              ? " heute"
+              : isPast
+                ? " (gemessen)"
+                : " (Vorhersage)");
           rainHeading.textContent =
             "Regenverlauf" +
-            (diffDays === 0 ? " heute" : isPast ? " (gemessen)" : " (Vorhersage)");
+            (diffDays === 0
+              ? " heute"
+              : isPast
+                ? " (gemessen)"
+                : " (Vorhersage)");
           renderLegend(isPast);
 
           const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min&hourly=precipitation_probability,precipitation,temperature_2m&timezone=Europe%2FBerlin&past_days=${past_days}&forecast_days=${forecast_days}`;
@@ -1625,13 +1645,17 @@
 
             const ds = isoDate(selectedDate);
             const dayIdx = data.daily.time.indexOf(ds);
-            const hourStartIdx = data.hourly.time.findIndex((t) => t.startsWith(ds));
+            const hourStartIdx = data.hourly.time.findIndex((t) =>
+              t.startsWith(ds),
+            );
 
             if (dayIdx === -1 || hourStartIdx === -1)
               throw new Error("Datum außerhalb des verfügbaren Bereichs");
 
-            const startHour = 8, endHour = 20;
-            let openFrom = -1, openTo = -1;
+            const startHour = 8,
+              endHour = 20;
+            let openFrom = -1,
+              openTo = -1;
             if (openHours.open) {
               openFrom = parseInt(openHours.from.slice(0, 2), 10);
               openTo = parseInt(openHours.to.slice(0, 2), 10);
@@ -1646,8 +1670,10 @@
               tempMax.textContent = Math.round(Math.max(...openTemps)) + "°";
               tempMin.textContent = Math.round(Math.min(...openTemps)) + "°";
             } else {
-              tempMax.textContent = Math.round(data.daily.temperature_2m_max[dayIdx]) + "°";
-              tempMin.textContent = Math.round(data.daily.temperature_2m_min[dayIdx]) + "°";
+              tempMax.textContent =
+                Math.round(data.daily.temperature_2m_max[dayIdx]) + "°";
+              tempMin.textContent =
+                Math.round(data.daily.temperature_2m_min[dayIdx]) + "°";
               tempHeading.textContent += " · ganzer Tag, geschlossen";
             }
 
@@ -1682,7 +1708,10 @@
             const now = new Date();
             updatedEl.textContent =
               "Stand: " +
-              now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
+              now.toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              }) +
               " Uhr";
           } catch (err) {
             rainChart.innerHTML =
